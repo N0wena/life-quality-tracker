@@ -1,0 +1,138 @@
+{
+  "tasks": {
+    "master": [
+      {
+        "id": 1,
+        "title": "Инициализация проекта и настройка инфраструктуры",
+        "description": "Настройка базовой структуры проекта, установка зависимостей и создание основных конфигурационных файлов",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [],
+        "details": "✅ Реструктурирован проект в монорепозиторий с workspaces. Создан корневой package.json с workspaces для frontend и backend. Разделены зависимости: Vue/Vite в frontend, Express/Prisma в backend. Перемещена папка prisma в backend. Настроен TypeScript, ESLint, Prettier. Все зависимости переустановлены. Проект готов к дальнейшей разработке.",
+        "testStrategy": "Проверить успешный запуск сервера и подключение к Supabase БД"
+      },
+      {
+        "id": 2,
+        "title": "Настройка базы данных и создание схемы",
+        "description": "Создание структуры БД для хранения пользователей и недельных оценок",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [1],
+        "details": "Создать таблицы Users (telegram_id, timezone, created_at, settings) и WeeklyRatings (id, user_telegram_id, week_start_date, rating, description, media_urls, created_at, updated_at). Настроить миграции и сиды для тестирования.",
+        "testStrategy": "Выполнить миграции и проверить структуру таблиц"
+      },
+      {
+        "id": 3,
+        "title": "Создание базового Telegram бота",
+        "description": "Реализация основной функциональности бота для регистрации пользователей и приема команд",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [2],
+        "details": "Интеграция с Telegram Bot API, обработка команд /start, регистрация новых пользователей в БД, настройка webhook для production. Использовать telegraf или node-telegram-bot-api.",
+        "testStrategy": "Протестировать команду /start и регистрацию пользователя"
+      },
+      {
+        "id": 4,
+        "title": "Система недельных оценок",
+        "description": "Реализация функционала оценки качества недели от 1 до 5",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [3],
+        "details": "Создать inline keyboard с оценками 1-5 (с эмодзи визуализацией). Логика определения текущей недели (понедельник-воскресенье). Валидация - только одна оценка за неделю. Сохранение в БД с привязкой к пользователю и неделе.",
+        "testStrategy": "Протестировать выставление оценки и запрет повторной оценки"
+      },
+      {
+        "id": 5,
+        "title": "API для Mini App",
+        "description": "Создание REST API для взаимодействия Telegram Mini App с backend",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [4],
+        "details": "Создать endpoints: GET /api/user/ratings (получение всех оценок пользователя), GET /api/user/current-week (проверка оценки текущей недели), POST /api/user/rating (создание оценки). Добавить аутентификацию через Telegram WebApp initData.",
+        "testStrategy": "Проверить все endpoints через Postman/curl"
+      },
+      {
+        "id": 6,
+        "title": "Telegram Mini App - базовая структура",
+        "description": "Создание Vue приложения для Mini App с интеграцией Telegram WebApp SDK",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [5],
+        "details": "✅ Настроено Vue приложение с Telegram WebApp SDK. Созданы компоненты Layout, Header, Calendar. Настроены маршрутизация (Vue Router) и глобальное состояние (Pinia). Интеграция с Telegram WebApp API для получения данных пользователя. Добавлены TypeScript типы для Telegram API.",
+        "testStrategy": "Проверить запуск Mini App в Telegram и получение user data"
+      },
+      {
+        "id": 7,
+        "title": "Календарный интерфейс с квадратами недель",
+        "description": "Реализация календарного компонента с визуализацией недельных оценок",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [6],
+        "details": "✅ Создана календарная сетка где каждый квадрат = неделя. Реализована цветовая схема: 1-красный, 2-оранжевый, 3-желтый, 4-светло-зеленый, 5-ярко-зеленый. Добавлена навигация по месяцам с кнопками. Выделение текущей недели синей рамкой. Responsive дизайн для разных размеров экрана. Легенда цветов. Интерактивность - клик по неделе для просмотра/добавления оценки.",
+        "testStrategy": "Проверить корректность отображения недель и цветов"
+      },
+      {
+        "id": 8,
+        "title": "Система уведомлений",
+        "description": "Реализация автоматических напоминаний о необходимости оценить неделю",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [4],
+        "details": "Настроить cron job для проверки каждое воскресенье в 20:00. Проверять пользователей без оценки за текущую неделю. Отправлять напоминание с inline кнопкой для быстрой оценки. Учитывать часовые пояса пользователей.",
+        "testStrategy": "Протестировать отправку уведомления вручную"
+      },
+      {
+        "id": 9,
+        "title": "Интеграция бота и Mini App",
+        "description": "Связывание функционала бота с Mini App через меню и кнопки",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [7],
+        "details": "Добавить кнопку 'Календарь' в меню бота для открытия Mini App. После выставления оценки в боте показывать ссылку на календарь. Настроить BotMenuButton для быстрого доступа к Mini App.",
+        "testStrategy": "Проверить переходы между ботом и Mini App"
+      },
+      {
+        "id": 10,
+        "title": "Обработка ошибок и валидация",
+        "description": "Реализация комплексной системы обработки ошибок и валидации данных",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [8, 9],
+        "details": "Добавить try-catch блоки во все API endpoints. Валидация входящих данных. Логирование ошибок. User-friendly сообщения об ошибках в боте и Mini App. Middleware для обработки исключений.",
+        "testStrategy": "Протестировать различные сценарии ошибок"
+      },
+      {
+        "id": 11,
+        "title": "Деплой и настройка production",
+        "description": "Подготовка приложения к продуктивному использованию",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [10],
+        "details": "Настроить деплой на Vercel/Netlify для frontend и Railway/Render для backend. Настроить SSL сертификаты. Настроить environment variables для production. Supabase автоматически предоставляет production БД.",
+        "testStrategy": "Проверить работу всех функций в production среде"
+      },
+      {
+        "id": 12,
+        "title": "Тестирование и документация",
+        "description": "Создание тестов и документации для проекта",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [11],
+        "details": "Написать unit тесты для API endpoints. E2E тесты для критических пользовательских сценариев. Создать README с инструкциями по запуску. API документация (Swagger). Пользовательская документация для бота.",
+        "testStrategy": "Достичь покрытия тестами не менее 70%"
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "createdAt": "2025-01-27T10:00:00.000Z",
+    "tags": {
+      "master": {
+        "name": "master",
+        "description": "Основные задачи проекта Weekly Life Quality Tracker",
+        "createdAt": "2025-01-27T10:00:00.000Z",
+        "currentTag": true
+      }
+    }
+  }
+}

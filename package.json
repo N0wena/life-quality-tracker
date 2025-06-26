@@ -1,0 +1,28 @@
+{
+  "name": "calendar-life-qualiti-tg",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=backend\"",
+    "build": "npm run build --workspace=frontend && npm run build --workspace=backend",
+    "frontend": "npm run dev --workspace=frontend",
+    "backend": "npm run dev --workspace=backend",
+    "bot": "npm run bot --workspace=backend",
+    "db:generate": "npm run db:generate --workspace=backend",
+    "db:push": "npm run db:push --workspace=backend",
+    "db:seed": "npm run db:seed --workspace=backend",
+    "db:reset": "npm run db:reset --workspace=backend",
+    "lint": "npm run lint --workspace=frontend && npm run lint --workspace=backend",
+    "format": "npm run format --workspace=frontend && npm run format --workspace=backend",
+    "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend",
+    "clean": "rm -rf node_modules frontend/node_modules backend/node_modules package-lock.json frontend/package-lock.json backend/package-lock.json"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}

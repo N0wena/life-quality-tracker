@@ -1,0 +1,143 @@
+# PRD: Weekly Life Quality Tracker (Telegram Bot + Mini App)
+
+## Product Overview
+Трекер качества прожитой недели с интеграцией в Telegram - позволяет пользователям оценивать качество своих недель по шкале 1-5 и визуализировать прогресс в календарном формате через Telegram Mini App.
+
+## Target Audience
+Пользователи Telegram, заинтересованные в самоанализе и отслеживании качества жизни на еженедельной основе.
+
+## Core Features
+
+### 1. Telegram Bot Functionality
+- **Weekly Rating System**: Пользователь может оценить неделю по шкале 1-5
+- **One Rating Per Week**: Ограничение - только одна оценка за неделю
+- **Rating UI**: Визуальное представление оценок (например, эмодзи или кастомные иконки вместо цифр)
+- **Week Period**: Неделя считается с понедельника по воскресенье
+
+### 2. Notification System
+- **Weekly Reminder**: Push уведомление каждое воскресенье
+- **Conditional Trigger**: Уведомление отправляется только если оценка за текущую неделю еще не поставлена
+- **Reminder Content**: Напоминание об оценке прошедшей недели
+
+### 3. Telegram Mini App (Web Calendar)
+- **Calendar Grid Interface**: Календарь с квадратиками, где каждый квадрат = одна неделя
+- **Color Coding**: Квадраты закрашиваются цветом соответствующим оценке недели
+  - Оценка 1: Красный/темно-красный цвет
+  - Оценка 2: Оранжевый цвет  
+  - Оценка 3: Желтый цвет
+  - Оценка 4: Светло-зеленый цвет
+  - Оценка 5: Ярко-зеленый цвет
+- **Navigation**: Возможность просматривать разные месяцы/периоды
+- **Current Week Highlight**: Выделение текущей недели
+
+### 4. Future Features (Phase 2)
+- **Week Descriptions**: Возможность добавлять текстовое описание к каждой неделе
+- **Media Attachments**: Добавление фотографий и видео к записям недели
+- **Editing Capability**: Редактирование существующих оценок и описаний
+- **Dual Interface Editing**: 
+  - Через Mini App (клик на квадрат)
+  - Через чат бота (последовательные сообщения: оценка → описание → медиа да/нет)
+
+## Technical Requirements
+
+### Backend
+- Node.js/Express server
+- Database для хранения:
+  - Пользователи (Telegram ID, настройки)
+  - Недельные оценки (дата, оценка, описание, медиа)
+  - Временные зоны пользователей
+- Telegram Bot API интеграция
+- Telegram Mini App API
+- Cron jobs для уведомлений
+
+### Frontend (Mini App)
+- React/Vue.js для Mini App
+- Responsive design для мобильных устройств
+- Telegram WebApp SDK интеграция
+- Calendar component с кастомизированными квадратами
+
+### Database Schema
+```
+Users:
+- telegram_id (primary)
+- timezone
+- created_at
+- settings (JSON)
+
+WeeklyRatings:
+- id (primary)
+- user_telegram_id (foreign key)
+- week_start_date
+- rating (1-5)
+- description (nullable, for future)
+- media_urls (JSON array, for future)
+- created_at
+- updated_at
+```
+
+## User Flow
+
+### Initial Setup
+1. Пользователь запускает бота в Telegram
+2. Бот приветствует и объясняет концепцию
+3. Настройка временной зоны (опционально)
+4. Показ инструкций по использованию
+
+### Weekly Rating Flow
+1. Пользователь может оценить неделю командой или кнопкой
+2. Бот показывает варианты оценки (1-5) с визуальным представлением
+3. Пользователь выбирает оценку
+4. Бот подтверждает сохранение и показывает ссылку на Mini App
+
+### Notification Flow
+1. Каждое воскресенье в 20:00 (настраиваемое время)
+2. Проверка: есть ли оценка за текущую неделю
+3. Если нет - отправка напоминания с кнопкой для быстрой оценки
+
+### Mini App Flow
+1. Пользователь открывает Mini App из меню бота
+2. Загружается календарь с историей оценок
+3. Текущая неделя выделена, если оценки нет - показывается подсказка
+4. Клик на любой квадрат показывает детали недели
+
+## Success Metrics
+- Daily Active Users (DAU)
+- Weekly retention rate
+- Completion rate недельных оценок
+- Time spent in Mini App
+- User engagement with notifications
+
+## Technical Stack
+- **Backend**: Node.js, Express, PostgreSQL/MongoDB
+- **Frontend**: React/Vue.js, Telegram WebApp SDK
+- **Bot**: node-telegram-bot-api или telegraf
+- **Deployment**: Docker, PM2 для production
+- **Hosting**: VPS или cloud provider с поддержкой Telegram webhooks
+
+## Security & Privacy
+- Безопасное хранение Telegram токенов
+- Шифрование пользовательских данных
+- GDPR compliance для европейских пользователей
+- Rate limiting для API endpoints
+
+## Development Phases
+
+### Phase 1 (MVP)
+- Базовый Telegram бот
+- Система оценок 1-5
+- Weekly notifications
+- Простой Mini App календарь
+- База данных и API
+
+### Phase 2 (Enhanced)
+- Редактирование оценок
+- Описания недель
+- Медиа файлы
+- Улучшенный UI Mini App
+- Аналитика и статистика
+
+## Constraints
+- Telegram Bot API ограничения
+- Mini App размеры и возможности
+- Хранение медиа файлов (Telegram или внешний storage)
+- Временные зоны пользователей для корректных уведомлений 

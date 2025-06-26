@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Used for Supabase connection pooling
+}
+
+// Таблица пользователей (Users)
+model Users {
+  id          String   @id @default(cuid())
+  telegram_id BigInt   @unique
+  timezone    String   @default("UTC")
+  created_at  DateTime @default(now())
+  settings    Json? // JSON для настроек пользователя
+
+  // Дополнительные поля для полноты
+  first_name String?
+  last_name  String?
+  username   String?
+
+  // Связь с оценками
+  weekly_ratings WeeklyRatings[]
+
+  @@map("users")
+}
+
+// Таблица недельных оценок (WeeklyRatings)
+model WeeklyRatings {
+  id               String   @id @default(cuid())
+  user_telegram_id BigInt
+  week_start_date  DateTime // Дата начала недели (понедельник)
+  rating           Int // Оценка от 1 до 5
+  description      String? // Описание недели
+  media_urls       String[] // Массив URL медиафайлов
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  // Связь с пользователем
+  user Users @relation(fields: [user_telegram_id], references: [telegram_id], onDelete: Cascade)
+
+  // Уникальность: один рейтинг на неделю для пользователя
+  @@unique([user_telegram_id, week_start_date])
+  @@map("weekly_ratings")
+}
