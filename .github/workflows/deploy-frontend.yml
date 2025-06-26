@@ -9,6 +9,7 @@ on:
     branches: [ main ]
     paths:
       - 'frontend/**'
+  workflow_dispatch: # Добавляю возможность ручного запуска
 
 # Разрешения для GitHub Pages
 permissions:
@@ -34,23 +35,18 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: 'frontend/package-lock.json'
+        cache-dependency-path: 'package-lock.json'
 
     - name: Install dependencies
-      run: |
-        cd frontend
-        npm ci
+      run: npm install
 
     - name: Lint and format check
       run: |
-        cd frontend
-        npm run lint
-        npx prettier --check .
+        npm run lint --workspace=frontend
+        npm run format --workspace=frontend
 
     - name: Build application
-      run: |
-        cd frontend
-        npm run build
+      run: npm run build --workspace=frontend
 
     - name: Setup Pages
       if: github.ref == 'refs/heads/main'
