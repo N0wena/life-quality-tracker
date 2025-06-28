@@ -6,9 +6,16 @@ import vueParser from 'vue-eslint-parser'
 
 export default [
   {
-    files: ['**/*.{js,mjs,cjs,ts,vue}']
+    ignores: [
+      'dist/**/*',
+      'build/**/*',
+      'node_modules/**/*',
+      '*.min.js',
+      '*.bundle.js'
+    ]
   },
   {
+    files: ['**/*.{js,mjs,cjs,ts,vue}'],
     languageOptions: { 
       globals: globals.browser,
       parser: vueParser,
@@ -23,6 +30,7 @@ export default [
   ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/essential'],
   {
+    files: ['**/*.{js,mjs,cjs,ts,vue}'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn',
       'vue/multi-word-component-names': 'off'

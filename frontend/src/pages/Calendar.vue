@@ -91,6 +91,17 @@
 import { computed, onMounted } from 'vue';
 import { useWeeklyRatingsStore } from '../stores/useWeeklyRatings';
 
+interface WeekRating {
+  rating: number;
+  description?: string;
+}
+
+interface Week {
+  weekStart: Date;
+  isCurrentWeek: boolean;
+  rating?: WeekRating;
+}
+
 const store = useWeeklyRatingsStore();
 
 const monthNames = [
@@ -121,7 +132,7 @@ const getRatingText = (rating: number): string => {
   return texts[rating as keyof typeof texts];
 };
 
-const handleWeekClick = (week: any) => {
+const handleWeekClick = (week: Week) => {
   if (week.isCurrentWeek) {
     // Открыть модал для оценки текущей недели
     if (window.Telegram?.WebApp) {

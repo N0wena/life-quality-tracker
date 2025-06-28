@@ -65,6 +65,8 @@ export const useWeeklyRatingsStore = defineStore('weeklyRatings', () => {
         isCurrentWeek,
       });
       
+      // Переходим к следующей неделе
+      weekStart = new Date(weekStart);
       weekStart.setDate(weekStart.getDate() + 7);
     }
     

@@ -4,11 +4,30 @@ import './style.css';
 import App from './App.vue';
 import router from './router';
 
-// Инициализация Telegram WebApp
+// Типизация для Telegram WebApp
+interface TelegramUser {
+  id: number;
+  first_name: string;
+  last_name?: string;
+  username?: string;
+  language_code?: string;
+}
+
+interface TelegramWebApp {
+  ready(): void;
+  expand(): void;
+  showAlert(message: string): void;
+  backgroundColor: string;
+  textColor: string;
+  initDataUnsafe?: {
+    user?: TelegramUser;
+  };
+}
+
 declare global {
   interface Window {
     Telegram: {
-      WebApp: any;
+      WebApp: TelegramWebApp;
     };
   }
 }

@@ -17,55 +17,51 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-const user = ref<any>(null);
+// Используем типы из main.ts
+type TelegramUser = {
+  id: number;
+  first_name: string;
+  last_name?: string;
+  username?: string;
+  language_code?: string;
+} | null;
+
+const user = ref<TelegramUser>(null);
 
 onMounted(() => {
   // Получаем данные пользователя из Telegram WebApp
   if (window.Telegram?.WebApp) {
-    user.value = window.Telegram.WebApp.initDataUnsafe?.user;
+    user.value = window.Telegram.WebApp.initDataUnsafe?.user || null;
   }
 });
 </script>
 
 <style scoped>
 .header {
-  background: var(--tg-theme-secondary-bg-color, #f8f9fa);
-  border-bottom: 1px solid var(--tg-theme-hint-color, #e5e7eb);
-  padding: 16px 0;
-  margin-bottom: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-content {
-  max-width: 100%;
+  max-width: 400px;
   margin: 0 auto;
-  padding: 0 16px;
   text-align: center;
 }
 
 .title {
-  margin: 0 0 8px 0;
-  font-size: 20px;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: var(--tg-theme-text-color, #000000);
 }
 
 .user-info {
-  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 .greeting {
-  color: var(--tg-theme-hint-color, #6b7280);
-  font-size: 14px;
-  font-weight: 400;
-}
-
-@media (max-width: 320px) {
-  .title {
-    font-size: 18px;
-  }
-  
-  .greeting {
-    font-size: 13px;
-  }
+  font-weight: 500;
 }
 </style> 
