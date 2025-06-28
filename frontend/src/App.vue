@@ -2,6 +2,8 @@
 import { onMounted } from 'vue';
 import Layout from './components/Layout.vue';
 
+// hust comment github actions
+
 onMounted(() => {
   // Настройка темы Telegram
   if (window.Telegram?.WebApp) {
